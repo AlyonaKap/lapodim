@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Hero';
+  src: url('./assets/hero-2-webfont/HeroLight-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hero';
+  src: url('./assets/hero-2-webfont/HeroLight-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Hero';
+  src: url('./assets/hero-2-webfont/HeroLight-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@theme {
+  --font-sans: "Hero", ui-sans-serif, system-ui, sans-serif;
+
+  --color-foreground: #5b7eff;
+  --color-background-light: #fffbeb;
+  --color-primary: #ffdc5b;
+  --color-primary-dark: #f4b800;
+  --color-light-yellow: #fffefa;
+  --color-dark-blue: #01225e;
+  --color-blue: #00399f;
+  --color-light-blue: #8b9efb;
+  --color-dark-yellow: #ffca07;
+  --color-light-purple: #dce2ff;
+}
