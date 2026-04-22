@@ -3,6 +3,7 @@ from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as filters
 from .models import Animal
 from .serializers import AnimalSerializer
+from .pagination import AnimalPagination
 
 
 class AnimalFilter(filters.FilterSet):
@@ -25,8 +26,10 @@ class AnimalFilter(filters.FilterSet):
 
 
 class AnimalViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Animal.objects.select_related('animal_type').prefetch_related('characters').all()
+    queryset = Animal.objects.select_related('animal_type').prefetch_related('characters').order_by('-id')
     serializer_class = AnimalSerializer
+    pagination_class = AnimalPagination
     filter_backends = [filters.DjangoFilterBackend, SearchFilter]
     filterset_class = AnimalFilter
     search_fields = ['name']
+

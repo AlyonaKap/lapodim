@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  overflow-x: hidden;
+}
+
 @font-face {
   font-family: 'Hero';
   src: url('./assets/hero-2-webfont/HeroLight-Light.woff') format('woff');
