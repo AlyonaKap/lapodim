@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Section from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { AnimalCard } from "@/components/ui/AnimalCard";
@@ -8,23 +7,10 @@ import { Footer } from "@/components/ui/Footer";
 import { Accordion } from "@/components/ui/Accordion";
 
 export default function Main() {
-    const [fetchedAnimal, setFetchedAnimal] = useState<{name: string, image_url: string} | null>(null);
-
-    useEffect(() => {
-        fetch('http://localhost:8000/api/animals/')
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.length > 0) {
-                    setFetchedAnimal(data[0]);
-                }
-            })
-            .catch(console.error);
-    }, []);
-
     return (
         <>
-            <Section className="bg-foreground px-4 lg:px-18 relative pb-6 pt-16">
-                <div className="flex pt-16 pb-20 gap-10 relative z-10">
+            <Section className="bg-foreground px-4 lg:px-18 relative pb-6 pt-16" withBottomBelly>
+                <div className="flex pt-12 pb-20 gap-10 relative z-10">
                     <div className="flex flex-col gap-12 w-full lg:w-1/2">
                         <h2 className="text-[56px] xl:text-5xl font-medium leading-tight text-light-yellow">Ми – 1500 тваринок, які чекають на твоє тепло</h2>
                         <p className="text-[25px] text-light-yellow max-w-[500px] tracking-wide">
@@ -35,23 +21,21 @@ export default function Main() {
 
                     <div className="hidden lg:flex pt-4 pb-16 justify-center items-center w-full lg:w-1/2 relative">
                         <AnimalCard
-                            name={fetchedAnimal ? fetchedAnimal.name : "Тимофій"}
-                            imageUrl={fetchedAnimal && fetchedAnimal.image_url ? fetchedAnimal.image_url : "https://cataas.com/cat?type=square"}
+                            name="Тимофей"
+                            imageUrl="https://cataas.com/cat?type=square"
+                            isNavigationEnabled={false}
                             className="z-20 -rotate-6 translate-y-16 translate-x-2 drop-shadow-md"
                         />
                         <AnimalCard
                             name="Манюня"
                             imageUrl="https://cataas.com/cat/cute"
+                            isNavigationEnabled={false}
                             className="z-10 rotate-8 -translate-y-8 -translate-x-4 drop-shadow-2xl"
                         />
                     </div>
                 </div>
 
-                <div className="absolute left-0 bottom-[-1px] w-full overflow-hidden leading-0 pointer-events-none flex">
-                    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" className="w-full h-[30px] md:h-[60px] block">
-                        <path d="M 0 0 C 480 80 960 80 1440 0 V 60 H 0 Z" fill="#fffbeb" />
-                    </svg>
-                </div>
+
             </Section>
 
             <Section
@@ -93,7 +77,7 @@ export default function Main() {
                             items={[
                                 {
                                     question: "Чи можна відвідати притулок?",
-                                    answer: "Так, ви можете прийти до притулку за адресою вул. Київська 2.",
+                                    answer: "Так, ви можете прийти до притулку за адресою вул. Київська 2",
                                 },
                                 {
                                     question: "Чи потрібні документи для адопції?",
@@ -101,7 +85,7 @@ export default function Main() {
                                 },
                                 {
                                     question: "Що означає стати куратором?",
-                                    answer: "Куратор — це людина, яка щомісяця підтримує утримання тваринки у притулку.",
+                                    answer: "Куратор — це людина, яка щомісяця підтримує утримання тваринки у притулку. Ви отримуєте фото та відео звіти про свого підопічного.",
                                 },
                             ]}
                         />
