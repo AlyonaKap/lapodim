@@ -44,10 +44,10 @@ export function Footer({ className }: { className?: string }) {
             Про нас
           </a>
           <a
-            href="#"
+            href="/likes"
             className="hover:underline hover:opacity-80 transition-opacity"
           >
-            Інше
+            Вподобання
           </a>
         </div>
 

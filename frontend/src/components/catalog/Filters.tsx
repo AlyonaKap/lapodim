@@ -1,21 +1,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
+import { CheckboxSelect } from "@/components/ui/CheckboxSelect";
 import type { AnimalSearchFilters } from "@/types/filters";
 import {
   sizeOptions,
   genderOptions,
   ageOptions,
   animalTypeOptions,
-  characterOptions,
+  type FilterOption,
 } from "@/utils/filterConstants";
 
 type FiltersProps = {
   filters: AnimalSearchFilters;
+  characterOptions: FilterOption[];
   handleFilterChange: (key: keyof AnimalSearchFilters, value: string) => void;
+  handleCharacterToggle: (value: string) => void;
 };
 
-export function Filters({ filters, handleFilterChange }: FiltersProps) {
+export function Filters({
+  characterOptions,
+  filters,
+  handleFilterChange,
+  handleCharacterToggle,
+}: FiltersProps) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const toggleFilters = (): void => {
@@ -24,14 +33,22 @@ export function Filters({ filters, handleFilterChange }: FiltersProps) {
 
   return (
     <div className="mt-4">
-      <div className="relative z-20 flex w-full items-center justify-between rounded-4xl bg-light-blue px-4 py-5 lg:px-12">
-        <h4 className="text-3xl text-light-yellow">Допомогти тваринці</h4>
+      <div className="relative z-20 flex items-center gap-4 rounded-4xl bg-light-blue px-4 py-5 lg:px-12">
+        <div className="flex-1 min-w-0">
+          <Input
+            inputSize="lg"
+            placeholder="Пошук..."
+            value={filters.search}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+            className="lg:w-[70%]"
+          />
+        </div>
 
         <Button
           variant="filter"
           size="md"
           onClick={toggleFilters}
-          className="relative z-70 cursor-pointer"
+          className="relative z-70 cursor-pointer shrink-0"
         >
           Фільтри
         </Button>
@@ -64,11 +81,11 @@ export function Filters({ filters, handleFilterChange }: FiltersProps) {
               value={filters.animal_type}
               onChange={(value) => handleFilterChange("animal_type", value)}
             />
-            <Select
+            <CheckboxSelect
               placeholder="Характер"
               options={characterOptions}
-              value={filters.character}
-              onChange={(value) => handleFilterChange("character", value)}
+              values={filters.character}
+              onChange={handleCharacterToggle}
             />
           </div>
         </div>

@@ -1,14 +1,39 @@
-import { useEffect, useRef, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useCreateAdoption, useGetAdoptions } from "@/api/queries/animals";
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/hooks/useAuth";
+import { useOpenLoginPage } from "@/hooks/useOpenLoginPage";
 
 type HelpAnimalModalProps = {
+  animalId: number;
   animalName: string;
   isOpen: boolean;
   onClose: () => void;
 };
 
-export function HelpAnimalModal({ isOpen, onClose }: HelpAnimalModalProps) {
+export function HelpAnimalModal({
+  animalId,
+  isOpen,
+  onClose,
+}: HelpAnimalModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { user } = useAuth();
+  const { data: adoptions = [] } = useGetAdoptions(Boolean(user));
+  const createAdoption = useCreateAdoption();
+  const openLoginPage = useOpenLoginPage();
+  const [isAdoptionSent, setIsAdoptionSent] = useState(false);
+
+  const hasExistingAdoption = adoptions.some(
+    (adoption) => adoption.animal.id === animalId,
+  );
+  const isAdoptionButtonDisabled =
+    createAdoption.isPending || isAdoptionSent || hasExistingAdoption;
+  const adoptionButtonText =
+    isAdoptionSent || hasExistingAdoption
+      ? "Заявка відправлена"
+      : createAdoption.isPending
+        ? "Надсилаємо..."
+        : "Забрати додому";
 
   useEffect(() => {
     const dialogElement = dialogRef.current;
@@ -53,6 +78,25 @@ export function HelpAnimalModal({ isOpen, onClose }: HelpAnimalModalProps) {
     dialogRef.current?.close();
   };
 
+  const handleOpenLoginPage = (intent: "adoption" | "curator"): void => {
+    dialogRef.current?.close();
+    openLoginPage(intent);
+  };
+
+  const handleCreateAdoption = async (): Promise<void> => {
+    if (!user) {
+      handleOpenLoginPage("adoption");
+      return;
+    }
+
+    try {
+      await createAdoption.mutateAsync({ animal_id: animalId });
+      setIsAdoptionSent(true);
+    } catch {
+      setIsAdoptionSent(false);
+    }
+  };
+
   return (
     <dialog
       ref={dialogRef}
@@ -74,15 +118,18 @@ export function HelpAnimalModal({ isOpen, onClose }: HelpAnimalModalProps) {
               type="button"
               variant="primary"
               size="lg"
-              onClick={() => {}}
+              onClick={() => void handleCreateAdoption()}
+              disabled={isAdoptionButtonDisabled}
               className="mt-10 min-w-[238px] justify-center"
             >
-              Забрати додому
+              {adoptionButtonText}
             </Button>
           </article>
 
           <article className="rounded-[34px] bg-white px-8 py-9 text-dark-blue">
-            <h3 className="max-w-[320px] text-3xl">Бажаєте стати куратором?</h3>
+            <h3 className="max-w-[320px] text-3xl">
+              Бажаєте стати куратором?
+            </h3>
             <p className="mt-5 max-w-[340px] text-xl">
               Ви можете оформити щомісячну підписку на корм і догляд за
               тваринкою
@@ -91,7 +138,7 @@ export function HelpAnimalModal({ isOpen, onClose }: HelpAnimalModalProps) {
               type="button"
               variant="secondary"
               size="lg"
-              onClick={() => {}}
+              onClick={() => handleOpenLoginPage("curator")}
               className="mt-10 min-w-[238px] justify-center bg-foreground"
             >
               Стати куратором

@@ -13,18 +13,18 @@ export function AnimalSearchResults({
   animals,
 }: AnimalSearchResultsProps) {
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Завантаження...</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message}</div>;
+    return <div>Помилка: {error.message}</div>;
   }
 
   return (
     <div className="mt-10 lg:mt-8 py-4">
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden text-dark-blue text-xl">
         {animals?.length === 0 ? (
-          <div>No animals found</div>
+          <div>Тварин не знайдено</div>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
             {animals?.map((animal, index) => (
