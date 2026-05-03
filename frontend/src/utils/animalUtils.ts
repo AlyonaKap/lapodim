@@ -29,9 +29,27 @@ export function formatYearsLabel(years: number): string {
   return `${roundedYears} років`;
 }
 
+export function formatMonthsLabel(months: number): string {
+  const roundedMonths = Math.max(1, Math.round(months));
+
+  if (roundedMonths % 10 === 1 && roundedMonths % 100 !== 11) {
+    return `${roundedMonths} місяць`;
+  }
+
+  if (
+    roundedMonths % 10 >= 2 &&
+    roundedMonths % 10 <= 4 &&
+    (roundedMonths % 100 < 12 || roundedMonths % 100 > 14)
+  ) {
+    return `${roundedMonths} місяці`;
+  }
+
+  return `${roundedMonths} місяців`;
+}
+
 export function formatAnimalAge(age: Animal["age"]): string {
   if (typeof age === "number") {
-    return formatYearsLabel(age);
+    return age < 1 ? formatMonthsLabel(Math.round(age * 12)) : formatYearsLabel(age);
   }
 
   const parsedDate = new Date(age);
@@ -50,6 +68,13 @@ export function formatAnimalAge(age: Animal["age"]): string {
     years -= 1;
   }
 
+  if (years < 1) {
+    const totalMonths =
+      (currentDate.getFullYear() - parsedDate.getFullYear()) * 12 +
+      (currentDate.getMonth() - parsedDate.getMonth());
+    return formatMonthsLabel(totalMonths);
+  }
+
   return formatYearsLabel(years);
 }
 
@@ -62,7 +87,7 @@ export function getAnimalMetaLine(animal: Animal): string {
 
 export function getCharacteristicItems(animal: Animal): string[] {
   const sizeLabel = sizeLabels[animal.size] || animal.size;
-  return [sizeLabel, ...animal.characters];
+  return [sizeLabel, ...(animal.characters ?? [])];
 }
 
 export function getAnimalDescription(animal: Animal): string {

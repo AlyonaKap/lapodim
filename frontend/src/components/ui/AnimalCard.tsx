@@ -27,7 +27,7 @@ function AnimalCardContent({
     return (
         <div
             className={cn(
-                "bg-primary rounded-[32px] p-4 relative flex flex-col gap-3 w-[300px] shadow-lg transition-transform",
+                "bg-primary rounded-[32px] mb-5 mt-1 p-4 relative flex flex-col gap-3 w-[300px] shadow-lg transition-transform",
                 isInteractive && "cursor-pointer hover:-translate-y-1",
                 className,
             )}
