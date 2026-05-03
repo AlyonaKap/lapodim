@@ -7,3 +7,4 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_staff', 'date')
     search_fields = ('name', 'surname', 'email', 'phone')
     ordering = ('-date',)
+

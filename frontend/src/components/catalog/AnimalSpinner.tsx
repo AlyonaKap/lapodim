@@ -5,9 +5,15 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { AnimalCard } from "@/components/ui/AnimalCard";
-import type { DisplayAnimal } from "@/types/animals";
+import type { Animal } from "@/types/animals";
+import { cn } from "@/utils/cn";
 
-export function AnimalSpinner({ animals }: { animals: DisplayAnimal[] }) {
+type AnimalSpinnerProps = {
+  animals: Animal[];
+  controlClassName?: string;
+};
+
+export function AnimalSpinner({ animals, controlClassName }: AnimalSpinnerProps) {
   const [visibleCount, setVisibleCount] = useState(4);
   const [startIndex, setStartIndex] = useState(0);
 
@@ -23,7 +29,9 @@ export function AnimalSpinner({ animals }: { animals: DisplayAnimal[] }) {
   }, []);
 
   const visibleAnimals = useMemo(() => {
-    return Array.from({ length: visibleCount }, (_, i) => {
+    if (animals.length === 0) return [];
+
+    return Array.from({ length: Math.min(visibleCount, animals.length) }, (_, i) => {
       const index = (startIndex + i) % animals.length;
       return animals[index];
     });
@@ -37,25 +45,37 @@ export function AnimalSpinner({ animals }: { animals: DisplayAnimal[] }) {
     setStartIndex((prev) => (prev + 1) % animals.length);
   };
 
+  if (animals.length === 0) {
+    return (
+      <div className="px-4 lg:px-12 text-light-yellow/70 text-xl">
+        Наразі немає рекомендацій
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center ">
       <button
         type="button"
         onClick={handlePrev}
         aria-label="Попередні тваринки"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full  text-light-yellow transition hover:opacity-90"
+        className={cn(
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-light-yellow transition hover:opacity-90",
+          controlClassName,
+        )}
       >
         <FontAwesomeIcon icon={faChevronLeft} />
       </button>
 
       <div className="w-full overflow-hidden">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {visibleAnimals.map((animal, index) => (
+          {visibleAnimals.map((animal) => (
             <AnimalCard
-              key={`${animal.name}-${index}`}
+              key={animal.id}
               name={animal.name}
-              imageUrl={animal.imageUrl}
-              isNavigationEnabled={false}
+              imageUrl={animal.image_url}
+              animalId={animal.id}
+              isNavigationEnabled={true}
               className="w-full"
             />
           ))}
@@ -66,9 +86,12 @@ export function AnimalSpinner({ animals }: { animals: DisplayAnimal[] }) {
         type="button"
         onClick={handleNext}
         aria-label="Наступні тваринки"
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-light-yellow transition "
+        className={cn(
+          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full cursor-pointer text-light-yellow transition hover:opacity-90",
+          controlClassName,
+        )}
       >
-        <FontAwesomeIcon icon={faChevronRight} className="text-light-yellow" />
+        <FontAwesomeIcon icon={faChevronRight} />
       </button>
     </div>
   );

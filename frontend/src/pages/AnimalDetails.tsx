@@ -8,6 +8,7 @@ import { HelpAnimalModal } from "@/components/animal/HelpAnimalModal";
 import { AnimalDetailsFallback } from "@/components/animal/AnimalDetailsFallback";
 import { BackIcon } from "@/components/icons/BackIcon";
 import { HeartIcon } from "@/components/icons/HeartIcon";
+import { useAnimalLike } from "@/hooks/useAnimalLike";
 import {
   getAnimalMetaLine,
   getCharacteristicItems,
@@ -34,6 +35,9 @@ export default function AnimalDetails() {
     isLoading,
     error,
   } = useGetAnimalById(parsedAnimalId ?? 0, parsedAnimalId !== null);
+  const { handleLike, isLikeDisabled, isLikePending, isLiked } = useAnimalLike(
+    parsedAnimalId ?? 0,
+  );
 
   if (parsedAnimalId === null) {
     return (
@@ -81,10 +85,13 @@ export default function AnimalDetails() {
 
             <button
               type="button"
-              className="inline-flex items-center gap-3 text-lg text-light-yellow transition hover:opacity-85 md:text-xl"
+              onClick={() => void handleLike()}
+              disabled={isLikeDisabled}
+              className="inline-flex items-center gap-3 text-lg text-light-yellow transition md:text-xl"
+              aria-pressed={isLiked}
             >
-              <span className="hidden sm:inline">В обране</span>
-              <HeartIcon />
+              <span>{isLikePending ? "Зберігаємо" : "В обране"}</span>
+              <HeartIcon isFilled={isLiked} />
             </button>
           </div>
 
@@ -149,6 +156,7 @@ export default function AnimalDetails() {
       </Section>
 
       <HelpAnimalModal
+        animalId={animal.id}
         animalName={animal.name}
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}

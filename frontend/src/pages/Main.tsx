@@ -5,8 +5,10 @@ import { LandingCard } from "@/components/landing/LandingCard";
 import ImageSpinner from "@/components/landing/ImageSpinner";
 import { Footer } from "@/components/ui/Footer";
 import { Accordion } from "@/components/ui/Accordion";
+import { useNavigate } from "react-router-dom"
 
 export default function Main() {
+    const navigate = useNavigate();
     return (
         <>
             <Section className="bg-foreground px-4 lg:px-18 relative pb-6 pt-16" withBottomBelly>
@@ -16,12 +18,12 @@ export default function Main() {
                         <p className="text-[25px] text-light-yellow max-w-[500px] tracking-wide">
                             Ти можеш стати нашим віртуальним господарем або подарувати дім одному з нас
                         </p>
-                        <Button variant="secondary" size="lg" className="w-fit">Знайти улюбленця</Button>
+                        <Button variant="secondary" size="lg" className="w-fit" onClick={() => navigate("/pet-catalog")}>Знайти улюбленця</Button>
                     </div>
 
                     <div className="hidden lg:flex pt-4 pb-16 justify-center items-center w-full lg:w-1/2 relative">
                         <AnimalCard
-                            name="Тимофей"
+                            name="Тимофій"
                             imageUrl="https://cataas.com/cat?type=square"
                             isNavigationEnabled={false}
                             className="z-20 -rotate-6 translate-y-16 translate-x-2 drop-shadow-md"

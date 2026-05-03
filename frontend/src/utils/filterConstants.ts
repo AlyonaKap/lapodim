@@ -21,13 +21,6 @@ export const ageOptions: FilterOption[] = [
 ];
 
 export const animalTypeOptions: FilterOption[] = [
-    { value: "dog", label: "Собака" },
-    { value: "cat", label: "Кіт" },
-];
-
-export const characterOptions: FilterOption[] = [
-    { value: "friendly", label: "Дружній" },
-    { value: "shy", label: "Сором'язливий" },
-    { value: "active", label: "Активний" },
-    { value: "calm", label: "Спокійний" },
+    { value: "Собака", label: "Собака" },
+    { value: "Кіт", label: "Кіт" },
 ];
