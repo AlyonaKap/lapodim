@@ -22,3 +22,35 @@ export type AnimalListResponse = {
     previous: string | null;
     results: Animal[];
 }
+
+export type AnimalCharacter = {
+    id: number;
+    character_type: string;
+}
+
+export type AdoptionStatus = "pending" | "approved" | "rejected";
+
+export type Adoption = {
+    id: number;
+    animal: Animal;
+    status: AdoptionStatus;
+    created_at: string;
+}
+
+export type CreateAdoptionPayload = {
+    animal_id: number;
+}
+
+export type UpdateAdoptionStatusPayload = {
+    adoptionId: number;
+    status: AdoptionStatus;
+}
+
+export type UserLike = {
+    animal: Animal;
+    created_at: string;
+}
+
+export type CreateUserLikePayload = {
+    animal_id: number;
+}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from cloudinary.models import CloudinaryField
 
 class AnimalType(models.Model):
@@ -43,6 +44,27 @@ class Animal(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Adoption(models.Model):
+
+    ADOPTION_STATUS = [
+        ('pending', 'Відправлена'),
+        ('approved', 'Схвалена'),
+        ('rejected','Відхилена'),
+        ]
+    
+    animal = models.ForeignKey(to=Animal, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    status = models.CharField(max_length=25, choices = ADOPTION_STATUS, default='pending')
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.animal.name}"
+    
+
+
+
+
 
 
     

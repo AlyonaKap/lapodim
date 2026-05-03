@@ -4,6 +4,8 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.conf import settings
+from api.animals.models import Animal
 
 
 class UserManager(BaseUserManager):
@@ -60,9 +62,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-# class UserLike(models.Model):
-#     pk = models.CompositePrimaryKey("user_id", "animal_id")
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
+    def get_full_name(self):
+        return f"{self.name} {self.surname}"
 
-#     created_at = models.DateTimeField(auto_now_add=True)
+    def get_short_name(self):
+        return self.name
+    
+class UserLike(models.Model):
+    pk = models.CompositePrimaryKey("user_id", "animal_id")
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} - {self.animal.name}"

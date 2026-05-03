@@ -7,4 +7,12 @@ const api = axios.create({
     },
 });
 
+export const authenticatedApi = axios.create({
+    baseURL: import.meta.env.VITE_API_URL + "/api",
+    withCredentials: true,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
 export default api;
